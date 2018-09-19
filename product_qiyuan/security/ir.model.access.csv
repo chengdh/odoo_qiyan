@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_product_qiyuan_product_qiyuan,product_qiyuan.product_qiyuan,model_product_qiyuan_product_qiyuan,,1,0,0,0
