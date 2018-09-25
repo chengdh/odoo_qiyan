@@ -22,6 +22,9 @@
                         <span>cm</span>
                     </div>
                 </label>
+                <field name="list_price" position="after">
+                    <field name="unit_price_from_partner" />
+                </field>
             </field>
         </record>
     </data>

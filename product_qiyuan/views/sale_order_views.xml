@@ -1,0 +1,20 @@
+<odoo>
+    <data>
+        <record id="view_order_form" model="ir.ui.view">
+            <field name="name">sale.order.form.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <button name="action_confirm" position="after">
+                    <button name="action_validate" string="财务审核" type="object" states="sale"/>
+                </button>
+                <xpath expr="//page/field[@name='order_line']/tree/field[@name='price_unit']" position="replace">
+                    <field name="price_unit" readonly="1" />
+                </xpath>
+                <xpath expr="//page/field[@name='order_line']/tree/field[@name='qty_delivered']" position="before">
+                    <field name="pieces_qty" />
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
