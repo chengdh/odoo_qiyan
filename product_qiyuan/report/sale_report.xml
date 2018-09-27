@@ -5,10 +5,10 @@
             id="action_report_saleorder"
             string="打印提货单"
             model="sale.order" 
-            report_type="qweb-pdf"
+            report_type="qweb-html"
             file="report_saleorder" 
-            name="sale.report_saleorder"
-            print_report_name="(object.state in ('draft', 'sent') and 'Quotation - %s' % (object.name)) or 'Order - %s' % (object.name)"
+            name="product_qiyuan.report_saleorder"
+            print_report_name="(object.state in ('validated') and '提货单 - %s' % (object.name)) or '提货单 - %s' % (object.name)"
         />
     </data>
 </odoo>

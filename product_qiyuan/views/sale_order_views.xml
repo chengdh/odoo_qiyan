@@ -14,6 +14,15 @@
                 <xpath expr="//page/field[@name='order_line']/tree/field[@name='qty_delivered']" position="before">
                     <field name="pieces_qty" />
                 </xpath>
+                <xpath expr="//page/field[@name='order_line']/form//field[@name='price_unit']" position="replace">
+                    <field name="price_unit" readonly="1" />
+                </xpath>
+                <xpath expr="//page/field[@name='order_line']/form//label[@for='qty_delivered']" position="before">
+                    <label for="pieces_qty" string="块数" />
+                    <div>
+                        <field name="pieces_qty" />
+                    </div>
+                </xpath>
             </field>
         </record>
     </data>

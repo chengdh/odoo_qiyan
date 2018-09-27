@@ -49,7 +49,7 @@ class SaleOrder(models.Model):
     @api.multi
     def _get_outstanding_info(self):
         '''
-        计算客户预付金额合计
+        计算客户预付金额合计,参考invoice中的相关方法
         '''
 
         amount_to_show = 0
@@ -66,8 +66,19 @@ class SaleOrder(models.Model):
 
         return amount_to_show
 
+    @api.multi
+    def print_validated_order(self):
+        '''
+        打印审核过的提货单
+        '''
+        self.filtered(lambda s: s.state == 'draft').write({'state': 'sent'})
+        return self.env.ref('sale.action_report_saleorder').report_action(self)
+
 
 class SaleOrderLine(models.Model):
+    '''
+    重写订单明细
+    '''
 
     _inherit = "sale.order.line"
 
