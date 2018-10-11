@@ -6,7 +6,7 @@
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
                 <page name='sales_purchases' position="after">
-                    <page name='price' string="单价及运费设置">
+                    <page name='price' string="单价及运费设置" attrs="{'invisible': [('supplier', '=', True)]}">
                         <group string="加气砖单价" name="price">
                             <field name="unit_price_per_cubic_metre"/>
                         </group>
