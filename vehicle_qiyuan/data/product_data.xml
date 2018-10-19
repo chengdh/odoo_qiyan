@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="product_category_puchase" model="product.category">
+            <field name="parent_id" ref="product.product_category_all"/>
+            <field name="name">采购</field>
+        </record>
+
+        <record id="product_category_service" model="product.category">
+            <field name="parent_id" ref="product_category_puchase"/>
+            <field name="name">服务</field>
+        </record>
+        <!--方-->
+        <record id="product_uom_cubic_metre" model="product.uom">
+            <field name="name">立方</field>
+            <field name="category_id" ref="product.product_uom_categ_vol"/>
+            <field name="factor">1.0</field>
+        </record>
+        <record id="service_vehicle_fee" model="product.product">
+            <field name="name">运输服务</field>
+            <field name="categ_id" ref="product_category_service"/>
+            <field name="standard_price">1</field>
+            <field name="list_price">1</field>
+            <field name="type">service</field>
+            <field name="sale_ok">False</field>
+            <field name="purchase_ok">True</field>
+            <field name="uom_id" ref="product_uom_cubic_metre"/>
+            <field name="uom_po_id" ref="product_uom_cubic_metre"/>
+            <field name="description">车辆运输服务.</field>
+        </record>
+    </data>
+</odoo>

@@ -13,7 +13,7 @@
                         <group string="工地距离" name="distance">
                             <field name="distance"/>
                         </group>
-                        <group string="运输单价" name="carrying_price">
+                        <group string="运输单价(元/方.公里)" name="carrying_price">
                             <field name="carrying_price"/>
                         </group>
                     </page>
