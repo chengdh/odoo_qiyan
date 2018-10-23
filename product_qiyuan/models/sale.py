@@ -17,13 +17,9 @@ class SaleOrder(models.Model):
         [
             ('draft', 'Quotation'),
             ('sent', 'Quotation Sent'),
+            # 财务审核
+            ('validated', '财务已审核'),
             ('sale', 'Sales Order'),
-            # 财务确认
-            ('validated', '财务确认'),
-            # 打印出库单
-            ('printed', '已打印'),
-            # 调度车辆
-            ('vehicle_dispatched', '车辆已调度'),
             ('done', 'Locked'),
             ('cancel', 'Cancelled'),
         ],
@@ -41,7 +37,7 @@ class SaleOrder(models.Model):
         '''
         ret = False
         error_str = ""
-        if self.state == 'sale':
+        if self.state in ('draft','sent'):
             outstanding_amount = self._get_outstanding_info()
             if self.amount_total < outstanding_amount:
                 ret = True
@@ -60,7 +56,7 @@ class SaleOrder(models.Model):
         '''
 
         amount_to_show = 0
-        if self.state == 'sale':
+        if self.state in ('draft','sent'):
             # account_id = 4 应收账款
             # account_id = 5 预收账款
             domain = [('account_id', 'in', [4, 5]),
@@ -80,7 +76,7 @@ class SaleOrder(models.Model):
     @api.multi
     def print_validated_order(self):
         '''
-        打印审核过的提货单
+        打印提货单
         测试一下
         '''
         self.filtered(lambda s: s.state == 'draft').write({'state': 'sent'})
@@ -106,7 +102,7 @@ class SaleOrderLine(models.Model):
             if line.product_id:
                 p_volume = line.product_id.volume
                 # FIXME 四舍五入?
-                pieces_qty = 0 
+                pieces_qty = 0
                 if p_volume > 0:
                     pieces_qty = round(line.product_uom_qty / p_volume)
                 line.pieces_qty = pieces_qty

@@ -154,6 +154,8 @@
       <field name="context">{
                     'search_default_vehicle': True,
                     'default_vehicle': True,
+                    'default_supplier': True,
+                    'default_customer': False,
                 }
       </field>
     </record>

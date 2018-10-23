@@ -4,9 +4,17 @@
         <field name="model">stock.picking</field>
         <field name="inherit_id" ref="stock.view_picking_form"/>
         <field name="arch" type="xml">
-            <button name="action_cancel" position="before">
-                <button name="action_create_po" attrs="{'invisible': []}" string="调度车辆" type="object" class="oe_highlight" groups="base.group_user"/>
+
+            <button name="button_validate" position="after">
+                <button name="action_create_po" string="调度车辆" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=','done')]}" />
+                <button name="action_out_door_confirm" attrs="{'invisible': [('state','!=','set_vehicle')]}" string="门卫确认" type="object" />
             </button>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <field name="po_id" invisible="1" />
+                <button name="action_view_po" string="" type="object" class="oe_stat_button" icon="fa-truck" style="color : blue;" attrs="{'invisible': [('po_id', '=', False)]}">
+                    <field name="vehicle_name" attrs="{'invisible': [('po_id', '=', False)]}"/>
+                </button>
+            </xpath>
         </field>
     </record>
 </odoo>

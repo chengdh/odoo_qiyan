@@ -12,8 +12,84 @@ class Picking(models.Model):
 
     _inherit = "stock.picking"
 
+    state = fields.Selection([
+        ('draft', 'Draft'),
+        ('waiting', 'Waiting Another Operation'),
+        ('confirmed', 'Waiting'),
+        ('assigned', 'Ready'),
+        ('done', 'Done'),
+        ('cancel', 'Cancelled'),
+        ('set_vehicle', '车辆已安排'),
+        ('out_door_confirmed', '门卫已确认'),
+    ], string='Status', compute='_compute_state',
+        copy=False, index=True, readonly=True, store=True, track_visibility='onchange',
+        help=" * Draft: not confirmed yet and will not be scheduled until confirmed.\n"
+             " * Waiting Another Operation: waiting for another move to proceed before it becomes automatically available (e.g. in Make-To-Order flows).\n"
+             " * Waiting: if it is not ready to be sent because the required products could not be reserved.\n"
+             " * Ready: products are reserved and ready to be sent. If the shipping policy is 'As soon as possible' this happens as soon as anything is reserved.\n"
+             " * Done: has been processed, can't be modified or cancelled anymore.\n"
+             " * Cancelled: has been cancelled, can't be confirmed anymore.")
+
+    ex_state = fields.Char(string="附加状态",size=20,default="draft",help="附加状态")
+
     po_id = fields.Many2one(
         'purchase.order', string='车辆运输订单', help='该配送单关联的运输订单')
+
+    vehicle_name = fields.Char(compute='_get_vehicle_name', string="车辆")
+
+    @api.depends('move_type', 'move_lines.state', 'move_lines.picking_id','po_id','ex_state')
+    @api.one
+    def _compute_state(self):
+        ''' State of a picking depends on the state of its related stock.move
+        - Draft: only used for "planned pickings"
+        - Waiting: if the picking is not ready to be sent so if
+          - (a) no quantity could be reserved at all or if
+          - (b) some quantities could be reserved and the shipping policy is "deliver all at once"
+        - Waiting another move: if the picking is waiting for another move
+        - Ready: if the picking is ready to be sent so if:
+          - (a) all quantities are reserved or if
+          - (b) some quantities could be reserved and the shipping policy is "as soon as possible"
+        - Done: if the picking is done.
+        - Cancelled: if the picking is cancelled
+        - set_vehicle 已完成车辆调度
+        - out_door_confirmed 门卫已确认
+        '''
+        if not self.move_lines:
+            self.state = 'draft'
+        elif any(move.state == 'draft' for move in self.move_lines):  # TDE FIXME: should be all ?
+            self.state = 'draft'
+        elif all(move.state == 'cancel' for move in self.move_lines):
+            self.state = 'cancel'
+        elif all(move.state in ['cancel', 'done'] for move in self.move_lines):
+            self.state = 'done'
+
+        else:
+            relevant_move_state = self.move_lines._get_relevant_state_among_moves()
+            if relevant_move_state == 'partially_available':
+                self.state = 'assigned'
+            else:
+                self.state = relevant_move_state
+
+        if self.po_id:
+            self.state = 'set_vehicle'
+        if self.ex_state == 'out_door_confirmed':
+            self.state = 'out_door_confirmed'
+
+
+    @api.depends('po_id')
+    def _get_vehicle_name(self):
+        for picking in self:
+            _logger.debug("in get_vehicle_name")
+            if picking.po_id:
+                self.vehicle_name = "%s%s" % (self.po_id.partner_id.name,self.po_id.partner_id.v_driver)
+
+
+    @api.multi
+    def action_out_door_confirm(self):
+        '''
+        门卫确认
+        '''
+        self.write({'ex_state': 'out_door_confirmed'})
 
     @api.multi
     def action_create_po(self):
