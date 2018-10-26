@@ -37,6 +37,10 @@ class Picking(models.Model):
 
     vehicle_name = fields.Char(compute='_get_vehicle_name', string="车辆")
 
+    show_set_vehicle = fields.Boolean(
+        compute='_compute_show_set_vehicle',
+        help='判断是否显示调度车辆按钮.')
+
     @api.depends('move_type', 'move_lines.state', 'move_lines.picking_id','po_id','ex_state')
     @api.one
     def _compute_state(self):
@@ -81,8 +85,15 @@ class Picking(models.Model):
         for picking in self:
             _logger.debug("in get_vehicle_name")
             if picking.po_id:
-                self.vehicle_name = "%s%s" % (self.po_id.partner_id.name,self.po_id.partner_id.v_driver)
+                picking.vehicle_name = "%s/%s" % (picking.po_id.partner_id.name,picking.po_id.partner_id.v_driver)
 
+    @api.multi
+    def _compute_show_set_vehicle(self):
+        for picking in self:
+            if picking.picking_type_code == 'outgoing' and picking.state == 'done':
+                picking.show_set_visible = True
+            else:
+                picking.show_set_visible = False 
 
     @api.multi
     def action_out_door_confirm(self):

@@ -6,7 +6,8 @@
         <field name="arch" type="xml">
 
             <button name="button_validate" position="after">
-                <button name="action_create_po" string="调度车辆" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=','done')]}" />
+                <field name="show_set_vehicle" invisible="1" />
+                <button name="action_create_po" string="调度车辆" type="object" class="oe_highlight" attrs="{'invisible': [('show_set_vehicle', '!=',True)]}" />
                 <button name="action_out_door_confirm" attrs="{'invisible': [('state','!=','set_vehicle')]}" string="门卫确认" type="object" />
             </button>
             <xpath expr="//div[@name='button_box']" position="inside">
