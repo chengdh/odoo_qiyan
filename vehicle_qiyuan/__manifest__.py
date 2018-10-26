@@ -27,6 +27,8 @@
     # always loaded
     'data': [
         # 'security/ir.model.access.csv',
+        'report/stock_picking_report.xml',
+        'report/stock_picking_report_templates.xml',
         'views/res_partner_views.xml',
         'views/stock_picking_views.xml',
         'data/product_data.xml',

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report 
+            id="action_report_picking"
+            string="打印提货单"
+            model="stock.picking" 
+            report_type="qweb-html"
+            file="report_picking" 
+            name="vehicle_qiyuan.report_picking"
+            print_report_name="(object.state in ('validated') and '提货单 - %s' % (object.name)) or '提货单 - %s' % (object.name)"
+        />
+    </data>
+</odoo>

@@ -7,13 +7,14 @@
 
             <button name="button_validate" position="after">
                 <field name="show_set_vehicle" invisible="1" />
-                <button name="action_create_po" string="调度车辆" type="object" class="oe_highlight" attrs="{'invisible': [('show_set_vehicle', '!=',True)]}" />
+                <button name="action_create_po" string="调度车辆" type="object" class="oe_highlight" attrs="{'invisible': [('show_set_vehicle', '=',False)]}" />
+                <button name="%(action_report_picking)d" string="打印提货单" attrs="{'invisible': ['|', ('state', '!=', 'set_vehicle'), ('is_locked', '=', False)]}" type="action" groups="base.group_user"/>
                 <button name="action_out_door_confirm" attrs="{'invisible': [('state','!=','set_vehicle')]}" string="门卫确认" type="object" />
             </button>
             <xpath expr="//div[@name='button_box']" position="inside">
                 <field name="po_id" invisible="1" />
                 <button name="action_view_po" string="" type="object" class="oe_stat_button" icon="fa-truck" style="color : blue;" attrs="{'invisible': [('po_id', '=', False)]}">
-                    <field name="vehicle_name" attrs="{'invisible': [('po_id', '=', False)]}"/>
+                    <field name="vehicle_name" attrs="{'invisible': [('po_id', '=', False)]}"  />
                 </button>
             </xpath>
         </field>

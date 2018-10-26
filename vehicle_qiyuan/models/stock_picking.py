@@ -90,11 +90,18 @@ class Picking(models.Model):
     @api.multi
     def _compute_show_set_vehicle(self):
         for picking in self:
+            _logger.debug("_compute_show_set_vehicle")
+            _logger.debug("picking.picking_type_code: %s" % picking.picking_type_code )
+            _logger.debug("picking.state: %s" % picking.state)
+ 
             if picking.picking_type_code == 'outgoing' and picking.state == 'done':
-                picking.show_set_visible = True
+                picking.show_set_vehicle = True
             else:
-                picking.show_set_visible = False 
+                picking.show_set_vehicle = False 
+            
 
+            _logger.debug("picking.show_set_visible : %s" % picking.show_set_vehicle)
+            
     @api.multi
     def action_out_door_confirm(self):
         '''

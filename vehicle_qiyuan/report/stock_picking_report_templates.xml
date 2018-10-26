@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_picking">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <div class="page">
+                    <div class="row">
+                        <h3 style='text-align: center;'>
+                            <span t-field="res_company.name"></span>
+                            <span>加气块提货凭证</span>
+                        </h3>
+                        <h4 style='text-align: center;'>
+                            <span t-field="doc.sale_id.date_order" t-field-options='{"format": "y年M月d日"}' />
+                            <span t-field="doc.sale_id.name" style="font-weight: bold;font-size: 14px;" />
+                        </h4>
+                    </div>
+                    <table class='table table-condensed table-bordered'>
+                        <tr>
+                            <th>客户名称</th>
+                            <td>
+                                <span t-field="doc.sale_id.partner_id" />
+                            </td>
+                            <th>车号</th>
+                            <td>
+                                <span t-field="doc.po_id.partner_id.name" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>销售经理</th>
+                            <td>
+                                <span t-field="doc.sale_id.user_id" />
+                            </td>
+                            <th>司机</th>
+                            <td>
+                                <span t-field="doc.po_id.partner_id.v_driver" />
+                            </td>
+                        </tr>
+                    </table>
+
+                    <table class='table table-condensed table-bordered'>
+                        <tr>
+                            <th colspan="5" style="text-align: center;">订单详情</th>
+                        </tr>
+                        <tr>
+                            <th>规格型号</th>
+                            <th>立方数</th>
+                            <th>块数</th>
+                            <th>单价</th>
+                            <th>金额</th>
+                        </tr>
+                        <t t-foreach="doc.sale_id.order_line" t-as="l">
+                            <tr>
+                                <td>
+                                    <span t-field="l.name" />
+                                </td>
+                                <td>
+                                    <span t-field="l.product_uom_qty" />
+                                </td>
+                                <td>
+                                    <span t-field="l.pieces_qty" />
+                                </td>
+                                <td>
+                                    <span t-field="l.price_unit" />
+                                </td>
+                                <td>
+                                    <span t-field="l.price_subtotal" />
+                                </td>
+                            </tr>
+                        </t>
+                    </table>
+                    <table class='table table-condensed table-bordered'>
+                        <tr>
+                            <th colspan="3" style="text-align: center;">出库信息</th>
+                        </tr>
+                        <tr>
+                            <th>规格型号</th>
+                            <th>立方数</th>
+                            <th>块数</th>
+                        </tr>
+                        <t t-foreach="doc.move_line_ids" t-as="l">
+                            <tr>
+                                <td>
+                                    <span t-field="l.product_id.name" />
+                                </td>
+                                <td>
+                                    <span t-field="l.qty_done" />
+                                </td>
+                                <td>
+                                    <span t-field="l.pieces_qty" />
+                                </td>
+                            </tr>
+                        </t>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>
