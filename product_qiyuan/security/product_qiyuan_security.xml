@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="group_set_customer_price" model="res.groups">
+        <field name="name">设置客户购买单价</field>
+        <field name="category_id" ref="base.module_category_hidden"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">可单独针对客户设置销售单价.</field>
+    </record>
+
+    <record id="group_sale_order_audit" model="res.groups">
+        <field name="name">销售订单审批</field>
+        <field name="category_id" ref="base.module_category_hidden"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">销售订单财务审批.</field>
+    </record>
+    <record model="res.users" id="base.user_root">
+        <field eval="[(4,ref('product_qiyuan.group_sale_order_audit'))]" name="groups_id"/>
+    </record>
+
+    <record model="res.users" id="base.user_root">
+        <field eval="[(4,ref('product_qiyuan.group_set_customer_price'))]" name="groups_id"/>
+    </record>
+
+    <!--添加菜单项-->
+     <record id="sale.menu_sale_order" model="ir.ui.menu" >
+        <field name="groups_id" eval="[(4,ref('product_qiyuan.group_sale_order_audit'))]"/>
+     </record>
+</odoo>

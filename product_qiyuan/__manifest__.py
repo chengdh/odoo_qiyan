@@ -20,7 +20,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'stock', 'sale'],
+    'depends': ['base', 'stock', 'sale','purchase','account'],
 
     # always loaded
     'data': [
@@ -31,6 +31,9 @@
         'views/templates.xml',
         'report/sale_report.xml',
         'report/sale_report_templates.xml',
+        'security/product_qiyuan_security.xml',
+        'security/res_user.xml',
+        'security/ir.model.access.csv',
     ],
     # only loaded in demonstration mode
     'demo': [

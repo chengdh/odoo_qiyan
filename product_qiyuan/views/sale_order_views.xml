@@ -6,7 +6,7 @@
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
                 <button name="action_confirm" position="after">
-                    <button name="action_validate" string="财务审核" type="object" states="draft,sent" groups="account.group_account_manager"/>
+                    <button name="action_validate" string="财务审核" type="object" states="draft,sent" groups="product_qiyuan.group_sale_order_audit"/>
                 </button>
 
                 <button id="action_confirm" position="replace"></button>

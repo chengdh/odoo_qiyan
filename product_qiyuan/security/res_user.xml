@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="salesman_qiyuan" model="res.users">
+            <field name="name">销售员</field>
+            <field name="login">xiaoshouyuan</field>
+            <field name="password">123456</field>
+            <!-- Avoid auto-including this demo user in any default group -->
+            <field eval="[(4,ref('sales_team.group_sale_salesman'))]" name="groups_id"/>
+        </record>
+
+        <record id="sales_manager_qiyuan" model="res.users">
+            <field name="name">财务经理</field>
+            <field name="login">caiwujingli</field>
+            <field name="password">123456</field>
+            <!-- Avoid auto-including this demo user in any default group -->
+            <field eval="[(4,ref('account.group_account_manager')),(4,ref('product_qiyuan.group_sale_order_audit'))]" name="groups_id"/>
+        </record>
+
+        <record id="ceo_qiyuan" model="res.users">
+            <field name="name">总经理</field>
+            <field name="login">zongjingli</field>
+            <field name="password">123456</field>
+            <!-- Avoid auto-including this demo user in any default group -->
+            <field eval="[(4,ref('sales_team.group_sale_manager')),
+            (4,ref('account.group_account_manager')),
+            (4,ref('stock.group_stock_manager')),
+            (4,ref('purchase.group_purchase_manager')),
+            (4,ref('product_qiyuan.group_set_customer_price')),
+            (4,ref('product_qiyuan.group_sale_order_audit'))]" name="groups_id"/>
+        </record>
+    </data>
+</odoo>
