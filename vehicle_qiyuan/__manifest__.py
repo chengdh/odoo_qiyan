@@ -32,6 +32,7 @@
         'views/res_partner_views.xml',
         'views/stock_picking_views.xml',
         'data/product_data.xml',
+        'data/ir_sequence_data.xml',
         'views/templates.xml',
     ],
     # only loaded in demonstration mode
