@@ -4,14 +4,27 @@
         <record id="salesman_qiyuan" model="res.users">
             <field name="name">销售员</field>
             <field name="login">xiaoshouyuan</field>
+            <field name="email">xiaoshouyuan@a.com</field>
             <field name="password">123456</field>
             <!-- Avoid auto-including this demo user in any default group -->
             <field eval="[(4,ref('sales_team.group_sale_salesman'))]" name="groups_id"/>
         </record>
 
+        <record id="salesman_qiyuan" model="res.users">
+            <field name="name">销售经理</field>
+            <field name="login">xiaoshoujingli</field>
+            <field name="email">xiaoshoujingli@a.com</field>
+            <field name="password">123456</field>
+            <!-- Avoid auto-including this demo user in any default group -->
+            <field eval="[(4,ref('sales_team.group_sale_manager'))]" name="groups_id"/>
+        </record>
+
+
+
         <record id="sales_manager_qiyuan" model="res.users">
             <field name="name">财务经理</field>
             <field name="login">caiwujingli</field>
+            <field name="email">caiwujingli@a.com</field>
             <field name="password">123456</field>
             <!-- Avoid auto-including this demo user in any default group -->
             <field eval="[(4,ref('account.group_account_manager')),(4,ref('product_qiyuan.group_sale_order_audit'))]" name="groups_id"/>
@@ -20,6 +33,7 @@
         <record id="ceo_qiyuan" model="res.users">
             <field name="name">总经理</field>
             <field name="login">zongjingli</field>
+            <field name="email">zongjingli@a.com</field>
             <field name="password">123456</field>
             <!-- Avoid auto-including this demo user in any default group -->
             <field eval="[(4,ref('sales_team.group_sale_manager')),

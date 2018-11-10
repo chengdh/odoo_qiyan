@@ -22,7 +22,11 @@
     </record>
 
     <!--添加菜单项-->
-     <record id="sale.menu_sale_order" model="ir.ui.menu" >
+    <record id="sale.menu_sale_order" model="ir.ui.menu">
         <field name="groups_id" eval="[(4,ref('product_qiyuan.group_sale_order_audit'))]"/>
-     </record>
+    </record>
+
+    <record id="sale.menu_sale_quotations" model="ir.ui.menu">
+        <field name="groups_id" eval="[(4,ref('product_qiyuan.group_sale_order_audit'))]"/>
+    </record>
 </odoo>

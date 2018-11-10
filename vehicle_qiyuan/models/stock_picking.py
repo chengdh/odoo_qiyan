@@ -158,6 +158,8 @@ class Picking(models.Model):
 
             po = purchase_order_obj.create(purchase_order)
             self.write({'po_id': po.id})
+            #将车辆排班序号更新到最后
+            vehicle.update_v_order()
             return self.action_view_po()
 
     @api.multi

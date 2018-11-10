@@ -29,15 +29,28 @@ class Partner(models.Model):
 
     vehicle_cat_id = fields.Many2one(
         'qiyuan.vehicle_cat', string='所属分类', help="车辆所属分类.")
-    
+
     @api.model
     def next_free_vehicle(self):
         '''
         获取下一辆空闲车辆
         '''
-        return self.search([('vehicle','=',True),('v_state','=','free')],limit = 1)
+        return self.search([('vehicle', '=', True), ('v_state', '=', 'free')],limit=1)
 
+    @api.model
+    def create(self, vals):
+        vals['v_order'] = self.env['ir.sequence'].next_by_code('vehicle.v_order')
+        result = super(Partner, self).create(vals)
+        return result
     
+    @api.multi
+    def update_v_order(self):
+        '''
+        更新车辆的排班序号为最末
+        '''
+        v_order = self.env['ir.sequence'].next_by_code('vehicle.v_order')
+        for vehicle in self:
+            vehicle.write({"v_order": v_order})
 
 
 class VehicleCat(models.Model):
