@@ -20,5 +20,17 @@
                 </page>
             </field>
         </record>
+        <record id="view_partner_form_add_credit_limit" model="ir.ui.view">
+            <field name="name">view_partner_form_add_credit_limit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="account.view_partner_property_form"/>
+            <field name="arch" type="xml">
+                <group name="accounting_entries" position="after">
+                    <group string="信用额度" name="accounting_credit_limit" groups="product_qiyuan.group_set_customer_price">
+                        <field name="credit_limit"/>
+                    </group>
+                </group>
+            </field>
+        </record>
     </data>
 </odoo>

@@ -43,7 +43,7 @@ class SaleOrder(models.Model):
                 ret = True
                 self.write({'state': 'validated'})
             else:
-                error_str = ("当前客户预付款余额为:%s,预付余额不足，请先付款!") % outstanding_amount
+                error_str = ("当前客户信用余额为:%s,信用余额不足，请先付款!") % outstanding_amount
         else:
             error_str = "订单状态不正确!"
         if not ret:
@@ -71,7 +71,10 @@ class SaleOrder(models.Model):
                 amount_to_show += abs(line.amount_residual_currency
                                       or line.amount_residual)
 
-        return amount_to_show
+            #获取信用额度
+            credit_limit = self.partner_id.credit_limit
+
+        return amount_to_show + credit_limit
 
     @api.multi
     def print_validated_order(self):
