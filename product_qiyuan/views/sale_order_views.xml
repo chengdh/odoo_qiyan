@@ -5,14 +5,18 @@
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
-                <button name="action_confirm" position="after">
+                <!-- <button name="action_confirm" position="after">
                     <button name="action_validate" string="财务审核" type="object" states="draft,sent" groups="product_qiyuan.group_sale_order_audit"/>
                 </button>
 
                 <button id="action_confirm" position="replace"></button>
                 <xpath expr="//button[@name='action_confirm']" position="replace">
                     <button name="action_confirm" string="确认订单" type="object" states="validated" groups="sales_team.group_sale_manager" />
-                </xpath>
+                </xpath> -->
+
+                <field name="partner_id" position="replace">
+                    <field name="partner_id" domain="[('customer','=',True)]" readonly="0" context="{'search_default_customer':1, 'show_address': 1}" options='{"always_reload": True}'/>
+                </field>
                 <xpath expr="//page/field[@name='order_line']/tree/field[@name='price_unit']" position="replace">
                     <field name="price_unit" readonly="1" />
                 </xpath>

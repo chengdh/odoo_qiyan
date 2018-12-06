@@ -9,7 +9,7 @@ class Product(models.Model):
 
     w = fields.Integer(string="长度(cm)", help="加气砖宽度-厘米", default=30)
     h = fields.Integer(string="宽度(cm)", help="加气砖高度-厘米", default=20)
-    l = fields.Integer(string="高度(cm)", help="加气砖宽度-厘米", default=50)
+    l = fields.Integer(string="高度(cm)", help="加气砖宽度-厘米", default=60)
     unit_price_from_partner = fields.Boolean(
         "自客户资料中读取单价", help="自客户资料中读取单价", default=True)
 
@@ -20,4 +20,3 @@ class Product(models.Model):
         '''
         self.volume = (self.w*self.l*self.h)/1000000
         self.weight = self.volume * 10
-
