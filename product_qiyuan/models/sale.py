@@ -30,7 +30,11 @@ class SaleOrder(models.Model):
         track_visibility='onchange',
         default='draft')
 
-    partner_id = fields.Many2one('res.partner', string='Customer', required=True, change_default=True, index=True, track_visibility='always')
+    partner_id = fields.Many2one('res.partner', string='Customer', states={
+    }, readonly=False, required=True, change_default=True, index=True, track_visibility='always')
+
+    order_line = fields.One2many('sale.order.line', 'order_id', string='Order Lines', states={'cancel': [('readonly', True)]}, copy=True, auto_join=True)
+
 
     @api.multi
     def action_confirm(self):
@@ -38,7 +42,7 @@ class SaleOrder(models.Model):
         重写订单确认
         '''
         if self.action_validate():
-            super(SaleOrder,self).action_confirm()
+            super(SaleOrder, self).action_confirm()
 
     @api.multi
     def action_validate(self):
@@ -47,13 +51,14 @@ class SaleOrder(models.Model):
         '''
         ret = False
         error_str = ""
-        if self.state in ('draft','sent'):
+        if self.state in ('draft', 'sent'):
             outstanding_amount = self._get_outstanding_info()
             if self.amount_total < outstanding_amount:
                 ret = True
                 # self.write({'state': 'validated'})
             else:
-                error_str = ("当前客户信用余额为:%s,信用余额不足，请先进行付款操作!") % outstanding_amount
+                error_str = (
+                    "当前客户信用余额为:%s,信用余额不足，请先进行付款操作!") % outstanding_amount
         else:
             error_str = "订单状态不正确!"
         if not ret:
@@ -67,7 +72,7 @@ class SaleOrder(models.Model):
         '''
 
         amount_to_show = 0
-        if self.state in ('draft','sent'):
+        if self.state in ('draft', 'sent'):
             # account_id = 4 应收账款
             # account_id = 5 预收账款
             domain = [('account_id', 'in', [4, 5]),
@@ -82,7 +87,7 @@ class SaleOrder(models.Model):
                 amount_to_show += abs(line.amount_residual_currency
                                       or line.amount_residual)
 
-            #获取信用额度
+            # 获取信用额度
             credit_limit = self.partner_id.credit_limit
 
         return amount_to_show + credit_limit
@@ -96,29 +101,7 @@ class SaleOrder(models.Model):
         self.filtered(lambda s: s.state == 'draft').write({'state': 'sent'})
         return self.env.ref('sale.action_report_saleorder').report_action(self)
 
-    @api.multi
-    @api.onchange('partner_id')
-    def change_partner_after_done(self):
-        '''
-        订单完成后修改合作伙伴信息
-        需要修改以下信息:
-        1 判断有无开票信息,如有开票信息,则不允许修改,只能重开订单 
-        2 修改订单partner_id,并重新计算单价及合计
-        3 修改关联stock.picking.partner_id 
-        4 修改关联stock.move partner_id
-        5 修改关联stock.move.line partner_id
-        '''
-        if  not self.partner_id or self.state != 'done':
-            return
-
-        #判断有无开票
-        if self.invoice_count > 0:
-            raise UserError("该订单已开发票,不能再修改客户信息!")
-
-        #重新计算各行明细信息
-        for line in self.order_line:
-            line.product_id_change()
-            
+  
 
 class SaleOrderLine(models.Model):
     '''

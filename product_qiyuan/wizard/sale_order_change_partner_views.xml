@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sale_order_change_partner" model="ir.ui.view">
+        <field name="name">修改客户信息</field>
+        <field name="model">sale.order.change_partner</field>
+        <field name="arch" type="xml">
+            <form string="修改客户信息">
+                <p class="oe_grey">
+                    确认修改客户信息后，以下信息同时被修改：
+                    <ol>
+                        <li>订单明细中的单价及合计</li>
+                        <li>订单关联出库单的客户信息</li>
+                        <li>关联车辆运输单的客户信息及价格信息</li>
+                    </ol>
+                </p>
+                <group>
+                    <field name="partner_id" domain="[('customer', '=', True),('employee','=',False),('vehicle','=',False)]" context="{'search_default_customer':1, 'show_address': 1}" options="{'always_reload': True,'no_quick_create': True,'no_create_edit' : True}"/>
+                </group>
+                <footer>
+                    <button name="action_confirm" string="确认修改" type="object" class="btn-primary"/>
+                    <button string="取消" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_view_sale_order_change_partner" model="ir.actions.act_window">
+        <field name="name">修改客户信息</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order.change_partner</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="groups_id" eval="[(4,ref('sales_team.group_sale_salesman'))]"/>
+    </record>
+</odoo>
