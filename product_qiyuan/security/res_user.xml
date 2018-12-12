@@ -10,13 +10,24 @@
             <field eval="[(4,ref('sales_team.group_sale_salesman'))]" name="groups_id"/>
         </record>
 
+        <record id="salesmanager_qiyuan" model="res.users">
+            <field name="name">销售经理</field>
+            <field name="login">xiaoshoujingli</field>
+            <field name="email">xiaoshoujingli@a.com</field>
+            <field name="password">123456</field>
+            <!-- Avoid auto-including this demo user in any default group -->
+            <field eval="[(4,ref('sales_team.group_sale_manager')),
+            (4,ref('product_qiyuan.group_change_so_customer_after_done'))]" name="groups_id"/>
+        </record>
+
         <record id="salesman_qiyuan" model="res.users">
             <field name="name">销售经理</field>
             <field name="login">xiaoshoujingli</field>
             <field name="email">xiaoshoujingli@a.com</field>
             <field name="password">123456</field>
             <!-- Avoid auto-including this demo user in any default group -->
-            <field eval="[(4,ref('sales_team.group_sale_manager'))]" name="groups_id"/>
+            <field eval="[(4,ref('sales_team.group_sale_manager')),
+            (4,ref('product_qiyuan.group_change_so_customer_after_done'))]" name="groups_id"/>
         </record>
 
 

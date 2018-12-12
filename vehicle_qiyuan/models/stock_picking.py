@@ -119,8 +119,16 @@ class Picking(models.Model):
         for picking in self:
             po = picking.po_id
             old_partner = picking.partner_id
+
             new_partner = partner_obj.browse(new_partner_id)[0]
+
+            picking_vals = {"partner_id": self.partner_id.id}
+            picking_vals = self.env['stock.picking'].play_onchanges(picking_vals,['partner_id'])
+
+            picking.write(picking_vals)
+
             if po:
+                po.write({'partner_ref': new_partner.display_name})
                 for line in po.order_line:
                     old_product_qty = line.product_qty
                     #按照新的单价及数量计算运输费用
@@ -145,6 +153,7 @@ class Picking(models.Model):
                 # 'name': picking.partner_id.name,
                 'origin': picking.name,
                 'notes': picking.note,
+                'partner_ref': self.partner_id.display_name,
                 'vehicle_service_order': True,
             }
             if vehicle:

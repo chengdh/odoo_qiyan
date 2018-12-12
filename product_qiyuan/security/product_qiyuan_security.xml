@@ -7,6 +7,15 @@
         <field name="comment">可单独针对客户设置销售单价.</field>
     </record>
 
+    <record id="group_change_so_customer_after_done" model="res.groups">
+        <field name="name">订单确认后修改客户信息</field>
+        <field name="category_id" ref="base.module_category_hidden"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">订单确认后修改客户信息.</field>
+    </record>
+
+
+
     <record id="group_sale_order_audit" model="res.groups">
         <field name="name">销售订单审批</field>
         <field name="category_id" ref="base.module_category_hidden"/>
