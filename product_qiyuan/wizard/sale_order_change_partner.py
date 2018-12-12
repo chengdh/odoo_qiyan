@@ -53,10 +53,6 @@ class SaleOrderChangePartner(models.TransientModel):
         for line in sale_order.order_line:
             _logger.debug("change order_line: %s" % line)
             price_unit = line._get_display_price(line.product_id)
-            # vals = {'id': line.id, 'product_uom_qty': line.product_uom_qty,'product_id': line.product_id.id,'price_unit': price_unit}
-            # vals = self.env['sale.order.line'].play_onchanges(
-            #     vals, ['product_id', 'product_uom_qty'])
-            # _logger.debug("changed vals: %s" % vals)
             line.write({'price_unit' : price_unit}) 
         
         #更新调拨及出库息stock.picking
@@ -66,6 +62,9 @@ class SaleOrderChangePartner(models.TransientModel):
             #更新move_lines信息
             for move in picking.move_lines:
                 move.write({'partner_id': self.partner_id.id})
+
+            #更新对应的车辆运输单信息
+            picking.action_change_partner(self.partner_id.id)
 
         self.action_view_so()
 

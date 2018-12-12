@@ -30,10 +30,10 @@ class SaleOrder(models.Model):
         track_visibility='onchange',
         default='draft')
 
-    partner_id = fields.Many2one('res.partner', string='Customer', states={
-    }, readonly=False, required=True, change_default=True, index=True, track_visibility='always')
+    # partner_id = fields.Many2one('res.partner', string='Customer', states={
+    # }, readonly=False, required=True, change_default=True, index=True, track_visibility='always')
 
-    order_line = fields.One2many('sale.order.line', 'order_id', string='Order Lines', states={'cancel': [('readonly', True)]}, copy=True, auto_join=True)
+    # order_line = fields.One2many('sale.order.line', 'order_id', string='Order Lines', states={'cancel': [('readonly', True)]}, copy=True, auto_join=True)
 
 
     @api.multi

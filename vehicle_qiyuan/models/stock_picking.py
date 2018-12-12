@@ -6,8 +6,6 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
-
-
 class Picking(models.Model):
 
     _inherit = "stock.picking"
@@ -30,7 +28,8 @@ class Picking(models.Model):
              " * Done: has been processed, can't be modified or cancelled anymore.\n"
              " * Cancelled: has been cancelled, can't be confirmed anymore.")
 
-    ex_state = fields.Char(string="附加状态",size=20,default="draft",help="附加状态")
+    ex_state = fields.Char(string="附加状态", size=20,
+                           default="draft", help="附加状态")
 
     po_id = fields.Many2one(
         'purchase.order', string='车辆运输订单', help='该配送单关联的运输订单')
@@ -41,7 +40,7 @@ class Picking(models.Model):
         compute='_compute_show_set_vehicle',
         help='判断是否显示调度车辆按钮.')
 
-    @api.depends('move_type', 'move_lines.state', 'move_lines.picking_id','po_id','ex_state')
+    @api.depends('move_type', 'move_lines.state', 'move_lines.picking_id', 'po_id', 'ex_state')
     @api.one
     def _compute_state(self):
         ''' State of a picking depends on the state of its related stock.move
@@ -79,35 +78,55 @@ class Picking(models.Model):
         if self.ex_state == 'out_door_confirmed':
             self.state = 'out_door_confirmed'
 
-
     @api.depends('po_id')
     def _get_vehicle_name(self):
         for picking in self:
             _logger.debug("in get_vehicle_name")
             if picking.po_id:
-                picking.vehicle_name = "%s/%s" % (picking.po_id.partner_id.name,picking.po_id.partner_id.v_driver)
+                picking.vehicle_name = "%s/%s" % (
+                    picking.po_id.partner_id.name, picking.po_id.partner_id.v_driver)
 
     @api.multi
     def _compute_show_set_vehicle(self):
         for picking in self:
             _logger.debug("_compute_show_set_vehicle")
-            _logger.debug("picking.picking_type_code: %s" % picking.picking_type_code )
+            _logger.debug("picking.picking_type_code: %s" %
+                          picking.picking_type_code)
             _logger.debug("picking.state: %s" % picking.state)
- 
+
             if picking.picking_type_code == 'outgoing' and picking.state == 'done':
                 picking.show_set_vehicle = True
             else:
-                picking.show_set_vehicle = False 
-            
+                picking.show_set_vehicle = False
 
-            _logger.debug("picking.show_set_visible : %s" % picking.show_set_vehicle)
-            
+            _logger.debug("picking.show_set_visible : %s" %
+                          picking.show_set_vehicle)
+
     @api.multi
     def action_out_door_confirm(self):
         '''
         门卫确认
         '''
         self.write({'ex_state': 'out_door_confirmed'})
+
+    @api.multi
+    def action_change_partner(self, new_partner_id):
+        '''
+        修改客户信息
+        '''
+        partner_obj = self.env['res.partner']
+
+        for picking in self:
+            po = picking.po_id
+            old_partner = picking.partner_id
+            new_partner = partner_obj.browse(new_partner_id)[0]
+            if po:
+                for line in po.order_line:
+                    old_product_qty = line.product_qty
+                    #按照新的单价及数量计算运输费用
+                    new_product_qty = old_product_qty/old_partner.distance*new_partner.distance
+                    line.write(
+                        {'price_unit': picking.partner_id.carrying_price, 'product_qty': new_product_qty})
 
     @api.multi
     def action_create_po(self):
@@ -126,7 +145,7 @@ class Picking(models.Model):
                 # 'name': picking.partner_id.name,
                 'origin': picking.name,
                 'notes': picking.note,
-                'vehicle_service_order' : True,
+                'vehicle_service_order': True,
             }
             if vehicle:
                 purchase_order['partner_id'] = vehicle.id
@@ -141,7 +160,7 @@ class Picking(models.Model):
                     {
                         'name':
                         vehicle_service.name,
-                        #产品数量=公里数x立方数
+                        # 产品数量=公里数x立方数
                         'product_qty':
                         move_line.qty_done * picking.partner_id.distance,
                         'date_planned':
@@ -158,7 +177,7 @@ class Picking(models.Model):
 
             po = purchase_order_obj.create(purchase_order)
             self.write({'po_id': po.id})
-            #将车辆排班序号更新到最后
+            # 将车辆排班序号更新到最后
             vehicle.update_v_order()
             return self.action_view_po()
 
@@ -168,14 +187,16 @@ class Picking(models.Model):
         查看生成的po
         '''
         purchase_orders = self.mapped('po_id')
-        action = self.env.ref('purchase.purchase_order_action_generic').read()[0]
+        action = self.env.ref(
+            'purchase.purchase_order_action_generic').read()[0]
         if len(purchase_orders) > 1:
-            action['domain'] = [('id','in',purchase_orders.ids)]
+            action['domain'] = [('id', 'in', purchase_orders.ids)]
         elif len(purchase_orders) == 1:
-            action['views'] = [(self.env.ref('purchase.purchase_order_form').id,'form')]
+            action['views'] = [
+                (self.env.ref('purchase.purchase_order_form').id, 'form')]
             action['res_id'] = purchase_orders.ids[0]
         else:
             action = {'type': 'ir.actions.act_window_close'}
 
-        _logger.debug("action = %s" %action)
+        _logger.debug("action = %s" % action)
         return action
