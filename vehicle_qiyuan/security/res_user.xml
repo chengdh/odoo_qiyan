@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="vehicle_manager_qiyuan" model="res.users">
+            <field name="name">车辆调度员</field>
+            <field name="login">cheliangdiaodu</field>
+            <field name="email">cheliangdiaodu@a.com</field>
+            <field name="password">123456</field>
+            <!-- Avoid auto-including this demo user in any default group -->
+            <field eval="[(4,ref('vehicle_qiyuan.group_vehicle_manager'))]" name="groups_id"/>
+        </record>
+
+        <record id="door_guard_qiyuan" model="res.users">
+            <field name="name">门卫</field>
+            <field name="login">menwei</field>
+            <field name="email">menwei@a.com</field>
+            <field name="password">123456</field>
+            <!-- Avoid auto-including this demo user in any default group -->
+            <field eval="[(4,ref('vehicle_qiyuan.group_out_door_confirm'))]" name="groups_id"/>
+        </record>
+    </data>
+</odoo>

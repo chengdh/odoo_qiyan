@@ -7,21 +7,50 @@
         <field name="comment">可单独针对客户设置销售单价.</field>
     </record>
 
-    <record id="group_change_so_customer_after_done" model="res.groups">
-        <field name="name">订单确认后修改客户信息</field>
-        <field name="category_id" ref="base.module_category_hidden"/>
-        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
-        <field name="comment">订单确认后修改客户信息.</field>
-    </record>
-
-
-
     <record id="group_sale_order_audit" model="res.groups">
         <field name="name">销售订单审批</field>
         <field name="category_id" ref="base.module_category_hidden"/>
         <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
         <field name="comment">销售订单财务审批.</field>
     </record>
+    <!--添加菜单项-->
+    <!--/销售/订单/订单-->
+    <record id="sale.menu_sale_order" model="ir.ui.menu">
+        <field name="groups_id" eval="[(4,ref('product_qiyuan.group_sale_order_audit'))]"/>
+    </record>
+
+    <!--/销售/订单/报价单-->
+    <record id="sale.menu_sale_quotations" model="ir.ui.menu">
+        <field name="groups_id" eval="[(4,ref('product_qiyuan.group_sale_order_audit'))]"/>
+    </record>
+
+
+
+    <!--菜单权限-->
+    <!--/销售/订单/客户-->
+    <record id="sale.res_partner_menu" model="ir.ui.menu">
+        <field name="groups_id" eval="[(4,ref('product_qiyuan.group_sale_order_audit'))]"/>
+    </record>
+
+
+
+    <record id="group_change_so_partner_after_done" model="res.groups">
+        <field name="name">订单确认后修改客户信息</field>
+        <field name="category_id" ref="base.module_category_hidden"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">订单确认后修改客户信息.</field>
+    </record>
+
+    <!--菜单权限-->
+
+    <!--/销售/订单/订单-->
+    <record id="sale.menu_sale_order" model="ir.ui.menu">
+        <field name="groups_id" eval="[(4,ref('product_qiyuan.group_change_so_partner_after_done'))]"/>
+    </record>
+
+
+
+
     <record model="res.users" id="base.user_root">
         <field eval="[(4,ref('product_qiyuan.group_sale_order_audit'))]" name="groups_id"/>
     </record>

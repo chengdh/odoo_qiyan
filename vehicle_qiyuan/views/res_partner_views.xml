@@ -167,15 +167,142 @@
     </record>
     <!-- Top menu item -->
     <menuitem id="vehicle_menu_root" name="车辆管理" web_icon="vehicle_qiyuan,static/description/icon.png" sequence="7"/>
+
     <!-- menu categories -->
     <menuitem id="vehicle_manage_menu" name="车辆信息" parent="vehicle_menu_root" sequence="2"/>
     <!-- <menuitem name="Menu 2" id="vehicle_qiyuan.menu_2" parent="vehicle_qiyuan.menu_root"/> -->
 
-    <menuitem id="vehicle_menu" parent="vehicle_manage_menu" action="action_vehicle_form_view" sequence="3" groups="sales_team.group_sale_salesman"/>
+    <!--车辆调度-->
+    <record id="action_vehicle_stock_picking_tree" model="ir.actions.act_window">
+      <field name="name">出库单</field>
+      <field name="res_model">stock.picking</field>
+      <field name="view_mode">tree,kanban,form,calendar</field>
+      <field name="search_view_id" ref="stock.view_picking_internal_search" />
+
+      <field name="domain">[('picking_type_code','=','outgoing')]</field>
+      <field name="context">{
+                    'contact_display': 'partner_address',         
+                    'search_default_picking_type_code': 'outgoing',
+                    'create': False' 
+                }
+      </field>
+    </record>
+
+
+    <menuitem id="vehicle_stock_picking" name="出库单" action="action_vehicle_stock_picking_tree" parent="vehicle_manage_menu" sequence="1" groups="vehicle_qiyuan.group_vehicle_manager" />
+
+    <menuitem id="vehicle_menu" parent="vehicle_manage_menu" action="action_vehicle_form_view" sequence="3" groups="vehicle_qiyuan.group_vehicle_manager,sales_team.group_sale_salesman"/>
 
     <!--车辆分类-->
+    <menuitem id="vehicle_cat_menu" parent="vehicle_manage_menu" action="action_vehicle_cat" sequence="4" groups="vehicle_qiyuan.group_vehicle_manager"/>
 
-    <menuitem id="vehicle_cat_menu" parent="vehicle_manage_menu" action="action_vehicle_cat" sequence="4" groups="sales_team.group_sale_salesman"/>
+    <!--车辆费用-->
+    <menuitem id="vehicle_fee_manage_menu" name="运输费用" parent="vehicle_menu_root" sequence="3" />
+
+    <!--车辆运输单-->
+    <record id="action_vehicle_purchase_order_rfq_view" model="ir.actions.act_window">
+      <field name="name">运输单-未确认</field>
+      <field name="res_model">purchase.order</field>
+      <field name="view_mode">tree,kanban,form,pivot,graph,calendar</field>
+      <field name="search_view_id" ref="purchase.view_purchase_order_filter" />
+
+      <field name="domain">[('state','in',('draft','sent','cancel', 'confirmed')),('vehicle_service_order', '=', True)]</field>
+      <field name="context">{
+                    'search_default_vehicle_service_order': True,
+                    'search_default_partner_id_vehicle': True,
+                    'search_default_todo': 1,
+                    'default_vehicle_service_order': True,
+                    'show_purchase': False,
+                    'create': False' 
+                }
+      </field>
+      <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+              此处显示待确认的车辆运输单
+              </p>
+            </field>
+    </record>
+
+    <record id="action_vehicle_purchase_order_view" model="ir.actions.act_window">
+      <field name="name">运输单-已确认</field>
+      <field name="res_model">purchase.order</field>
+      <field name="view_mode">tree,kanban,form,pivot,graph,calendar</field>
+      <field name="search_view_id" ref="purchase.view_purchase_order_filter" />
+      <field name="domain">[('state','not in',('draft','sent', 'confirmed')),('vehicle_service_order', '=', True)]</field>
+      <field name="context">{
+                    'search_default_vehicle_service_order': True,
+                    'search_default_partner_id_vehicle': True,
+                    'search_default_todo': 1,
+                    'default_vehicle_service_order': True,
+                    'show_purchase': True,
+                    'create': False' 
+                }
+      </field>
+      <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+              此处显示已确认过的车辆运输单
+              </p>
+            </field>
+
+    </record>
+
+    <menuitem id="vehicle_purchase_order_rfq_menu" name="运输单-未确认" action="action_vehicle_purchase_order_rfq_view" parent="vehicle_fee_manage_menu" sequence="1" groups="vehicle_qiyuan.group_vehicle_manager"/>
+    <menuitem id="vehicle_purchase_order_menu" name="运输单-已确认" action="action_vehicle_purchase_order_view" parent="vehicle_fee_manage_menu" sequence="2" groups="vehicle_qiyuan.group_vehicle_manager"/>
+
+    <!--车辆账单-->
+    <record id="action_vehicle_invoice_tree" model="ir.actions.act_window">
+      <field name="name">结算账单</field>
+      <field name="res_model">account.invoice</field>
+      <field name="view_mode">tree,kanban,form,pivot,graph,calendar</field>
+      <field name="search_view_id" ref="account.view_account_invoice_filter" />
+      <field name="domain">[('type','=','in_invoice'),('partner_id.vehicle','=',True)]</field>
+      <field name="context">{
+                    'search_default_partner_id_vehicle': True,
+                    'default_type': 'in_invoice',
+                    'type': 'in_invoice',
+                    'journal_type': 'purchase'
+                }
+      </field>
+    </record>
+
+    <menuitem id="vehicle_account_invoice_menu" name="结算账单" action="action_vehicle_invoice_tree" parent="vehicle_fee_manage_menu" sequence="3" groups="vehicle_qiyuan.group_vehicle_manager,account.group_account_manager"/>
+
+    <!--车辆费用付款-->
+    <record id="action_vehicle_account_payments_payable" model="ir.actions.act_window">
+      <field name="name">付款</field>
+      <field name="res_model">account.payment</field>
+      <field name="view_mode">tree,kanban,form,graph</field>
+      <field name="view_id" ref="account.view_account_supplier_payment_tree" />
+      <field name="domain">[('partner_type', '=', 'supplier'),('partner_id.vehicle','=',True)]</field>
+      <field name="context">{
+                    'default_payment_type': 'outbound',
+                    'default_partner_type': 'supplier',
+                    'default_partner_id_vehicle': True
+                }
+      </field>
+    </record>
+
+    <menuitem id="vehicle_account_payment_menu" name="付款" action="action_vehicle_account_payments_payable" parent="vehicle_fee_manage_menu" sequence="4" groups="vehicle_qiyuan.group_vehicle_manager,account.group_account_manager"/>
+
+    <!--门卫菜单-->
+    <record id="action_vehicle_out_door_stock_picking" model="ir.actions.act_window">
+      <field name="name">出库单</field>
+      <field name="res_model">stock.picking</field>
+      <field name="view_mode">tree,kanban,form,calendar</field>
+      <field name="search_view_id" ref="stock.view_picking_internal_search" />
+
+      <field name="domain">[('picking_type_code','=','outgoing'),('state','in',('set_vehicle','out_door_confirmed'))]</field>
+      <field name="context">{
+                    'contact_display': 'partner_address',         
+                    'search_default_state': ('set_vehicle','out_door_confirmed'),
+                    'search_default_picking_type_code': 'outgoing',
+                    'create': False' 
+                }
+      </field>
+    </record>
+
+    <menuitem id="vehicle_out_door_confirm" name="出厂检查" action="action_vehicle_out_door_stock_picking" parent="vehicle_menu_root" sequence="5" groups="vehicle_qiyuan.group_out_door_confirm" />
+
 
     <!--
     <menuitem name="List" id="vehicle_qiyuan.menu_1_list" parent="vehicle_qiyuan.menu_1" action="vehicle_qiyuan.action_window"/>

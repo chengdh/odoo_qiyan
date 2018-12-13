@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="group_vehicle_manager" model="res.groups">
+        <field name="name">车辆调度</field>
+        <field name="category_id" ref="base.module_category_hidden"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">车辆调度.</field>
+    </record>
+    <!---->
+
+    <record id="group_out_door_confirm" model="res.groups">
+        <field name="name">车辆出门确认</field>
+        <field name="category_id" ref="base.module_category_hidden"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">车辆出门确认.</field>
+    </record>
+
+    <record model="res.users" id="base.user_root">
+        <field eval="[(4,ref('vehicle_qiyuan.group_vehicle_manager'))]" name="groups_id"/>
+    </record>
+
+    <record model="res.users" id="base.user_root">
+        <field eval="[(4,ref('vehicle_qiyuan.group_out_door_confirm'))]" name="groups_id"/>
+    </record>
+
+</odoo>
+
+
+

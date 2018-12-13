@@ -17,18 +17,19 @@
             <field name="password">123456</field>
             <!-- Avoid auto-including this demo user in any default group -->
             <field eval="[(4,ref('sales_team.group_sale_manager')),
-            (4,ref('product_qiyuan.group_change_so_customer_after_done'))]" name="groups_id"/>
+            (4,ref('product_qiyuan.group_change_so_partner_after_done'))]" name="groups_id"/>
         </record>
 
-        <record id="salesman_qiyuan" model="res.users">
-            <field name="name">销售经理</field>
-            <field name="login">xiaoshoujingli</field>
-            <field name="email">xiaoshoujingli@a.com</field>
+        <record id="stock_manager_qiyuan" model="res.users">
+            <field name="name">成品库库管</field>
+            <field name="login">kuguan</field>
+            <field name="email">kuguan@a.com</field>
             <field name="password">123456</field>
             <!-- Avoid auto-including this demo user in any default group -->
-            <field eval="[(4,ref('sales_team.group_sale_manager')),
-            (4,ref('product_qiyuan.group_change_so_customer_after_done'))]" name="groups_id"/>
+            <field eval="[(4,ref('stock.group_stock_manager'))]" name="groups_id"/>
         </record>
+
+
 
 
 
@@ -52,6 +53,7 @@
             (4,ref('stock.group_stock_manager')),
             (4,ref('purchase.group_purchase_manager')),
             (4,ref('product_qiyuan.group_set_customer_price')),
+            (4,ref('product_qiyuan.group_change_so_partner_after_done')),
             (4,ref('product_qiyuan.group_sale_order_audit'))]" name="groups_id"/>
         </record>
     </data>

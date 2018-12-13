@@ -26,7 +26,9 @@
 
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
+        'security/vehicle_qiyuan_security.xml',
+        'security/ir.model.access.csv',
+        'security/res_user.xml',
         'report/stock_picking_report.xml',
         'report/stock_picking_report_templates.xml',
         'views/res_partner_views.xml',

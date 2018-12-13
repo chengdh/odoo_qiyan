@@ -7,13 +7,13 @@
 
             <button name="button_validate" position="after">
                 <field name="show_set_vehicle" invisible="1" />
-                <button name="action_create_po" string="调度车辆" type="object" class="oe_highlight" attrs="{'invisible': [('show_set_vehicle', '=',False)]}" />
-                <button name="%(action_report_picking)d" string="打印提货单" attrs="{'invisible': ['|', ('state', '!=', 'set_vehicle'), ('is_locked', '=', False)]}" type="action" groups="base.group_user"/>
-                <button name="action_out_door_confirm" attrs="{'invisible': [('state','!=','set_vehicle')]}" string="门卫确认" type="object" />
+                <button name="action_create_po" string="调度车辆" type="object" class="oe_highlight" attrs="{'invisible': [('show_set_vehicle', '=',False)]}"  groups="vehicle_qiyuan.group_vehicle_manager"/>
+                <button name="%(action_report_picking)d" string="打印提货单" attrs="{'invisible': ['|', ('state', '!=', 'set_vehicle'), ('is_locked', '=', False)]}" type="action" groups="vehicle_qiyuan.group_vehicle_manager,sale.group_sale_manager"/>
+                <button name="action_out_door_confirm" attrs="{'invisible': [('state','!=','set_vehicle')]}" string="门卫确认" type="object" groups="vehicle_qiyuan.group_out_door_confirm" />
             </button>
 
             <button name="%(stock.act_stock_return_picking)d" position="replace">
-                <button name="%(stock.act_stock_return_picking)d" string="退库" attrs="{'invisible': ['|', ('state', 'not in', ['done','set_vehicle','out_door_confirmed']), ('is_locked', '=', False)]}" type="action" groups="base.group_user"/>
+                <button name="%(stock.act_stock_return_picking)d" string="退库" attrs="{'invisible': ['|', ('state', 'not in', ['done','set_vehicle','out_door_confirmed']), ('is_locked', '=', False)]}" type="action" groups="sale.group_sale_manager,vehicle_qiyuan.group_vehicle_manager,stock.group_stock_manager"/>
             </button>
             <xpath expr="//div[@name='button_box']" position="inside">
                 <field name="po_id" invisible="1" />
