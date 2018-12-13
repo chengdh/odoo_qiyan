@@ -122,7 +122,7 @@ class Picking(models.Model):
 
             new_partner = partner_obj.browse(new_partner_id)[0]
 
-            picking_vals = {"partner_id": self.partner_id.id}
+            picking_vals = {"partner_id": new_partner_id}
             picking_vals = self.env['stock.picking'].play_onchanges(picking_vals,['partner_id'])
 
             picking.write(picking_vals)

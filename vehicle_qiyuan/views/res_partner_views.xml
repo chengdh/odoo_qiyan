@@ -217,10 +217,10 @@
                 }
       </field>
       <field name="help" type="html">
-              <p class="oe_view_nocontent_create">
+        <p>
               此处显示待确认的车辆运输单
-              </p>
-            </field>
+        </p>
+      </field>
     </record>
 
     <record id="action_vehicle_purchase_order_view" model="ir.actions.act_window">
@@ -239,10 +239,10 @@
                 }
       </field>
       <field name="help" type="html">
-              <p class="oe_view_nocontent_create">
+        <p>
               此处显示已确认过的车辆运输单
-              </p>
-            </field>
+        </p>
+      </field>
 
     </record>
 
@@ -265,7 +265,7 @@
       </field>
     </record>
 
-    <menuitem id="vehicle_account_invoice_menu" name="结算账单" action="action_vehicle_invoice_tree" parent="vehicle_fee_manage_menu" sequence="3" groups="vehicle_qiyuan.group_vehicle_manager,account.group_account_manager"/>
+    <menuitem id="vehicle_account_invoice_menu" name="结算账单" action="action_vehicle_invoice_tree" parent="vehicle_fee_manage_menu" sequence="3" groups="account.group_account_manager"/>
 
     <!--车辆费用付款-->
     <record id="action_vehicle_account_payments_payable" model="ir.actions.act_window">
@@ -282,7 +282,7 @@
       </field>
     </record>
 
-    <menuitem id="vehicle_account_payment_menu" name="付款" action="action_vehicle_account_payments_payable" parent="vehicle_fee_manage_menu" sequence="4" groups="vehicle_qiyuan.group_vehicle_manager,account.group_account_manager"/>
+    <menuitem id="vehicle_account_payment_menu" name="付款" action="action_vehicle_account_payments_payable" parent="vehicle_fee_manage_menu" sequence="4" groups="account.group_account_manager"/>
 
     <!--门卫菜单-->
     <record id="action_vehicle_out_door_stock_picking" model="ir.actions.act_window">

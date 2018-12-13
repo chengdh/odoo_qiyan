@@ -8,7 +8,8 @@
             <button name="button_validate" position="after">
                 <field name="show_set_vehicle" invisible="1" />
                 <button name="action_create_po" string="调度车辆" type="object" class="oe_highlight" attrs="{'invisible': [('show_set_vehicle', '=',False)]}"  groups="vehicle_qiyuan.group_vehicle_manager"/>
-                <button name="%(action_report_picking)d" string="打印提货单" attrs="{'invisible': ['|', ('state', '!=', 'set_vehicle'), ('is_locked', '=', False)]}" type="action" groups="vehicle_qiyuan.group_vehicle_manager,sale.group_sale_manager"/>
+                <!-- <button name="%(action_report_picking)d" string="打印提货单" attrs="{'invisible': ['|', ('state', '!=', 'set_vehicle'), ('is_locked', '=', False)]}" type="action" groups="vehicle_qiyuan.group_vehicle_manager,sale.group_sale_manager"/> -->
+                <button name="%(action_report_picking)d" string="打印提货单" attrs="{'invisible': [('is_locked', '=', False)]}" type="action" groups="vehicle_qiyuan.group_vehicle_manager,sale.group_sale_manager"/>
                 <button name="action_out_door_confirm" attrs="{'invisible': [('state','!=','set_vehicle')]}" string="门卫确认" type="object" groups="vehicle_qiyuan.group_out_door_confirm" />
             </button>
 

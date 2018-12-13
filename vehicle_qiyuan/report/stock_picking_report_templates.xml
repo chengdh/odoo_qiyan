@@ -18,7 +18,7 @@
                         <tr>
                             <th>客户名称</th>
                             <td>
-                                <span t-field="doc.sale_id.partner_id" />
+                                <!-- <span t-field="doc.sale_id.partner_id" /> -->
                             </td>
                             <th>车号</th>
                             <td>
@@ -39,14 +39,14 @@
 
                     <table class='table table-condensed table-bordered'>
                         <tr>
-                            <th colspan="5" style="text-align: center;">订单详情</th>
+                            <th colspan="3" style="text-align: center;">订单详情</th>
                         </tr>
                         <tr>
                             <th>规格型号</th>
                             <th>立方数</th>
                             <th>块数</th>
-                            <th>单价</th>
-                            <th>金额</th>
+                            <!-- <th>单价</th>
+                            <th>金额</th> -->
                         </tr>
                         <t t-foreach="doc.sale_id.order_line" t-as="l">
                             <tr>
@@ -59,12 +59,12 @@
                                 <td>
                                     <span t-field="l.pieces_qty" />
                                 </td>
-                                <td>
+                                <!-- <td>
                                     <span t-field="l.price_unit" />
                                 </td>
                                 <td>
                                     <span t-field="l.price_subtotal" />
-                                </td>
+                                </td> -->
                             </tr>
                         </t>
                     </table>
