@@ -1,4 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_vehicle_cat_vehicle_manager,vehicle_cat.vehicle_manager,vehicle_qiyuan.model_qiyuan_vehicle_cat,vehicle_qiyuan.group_vehicle_manager,1,1,1,1
 access_res_partner_vehicle_manager,res.partner.vehicle_manager,base.model_res_partner,vehicle_qiyuan.group_vehicle_manager,1,1,1,1
 access_stock_picking_vehicle_manager,stock.picking.vehicle_manager,stock.model_stock_picking,vehicle_qiyuan.group_vehicle_manager,1,1,0,0
 access_stock_move_vehicle_manager,stock.move.vehicle_manager,stock.model_stock_move,vehicle_qiyuan.group_vehicle_manager,1,1,0,0
