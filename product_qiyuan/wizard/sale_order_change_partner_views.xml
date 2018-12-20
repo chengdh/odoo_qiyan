@@ -14,7 +14,7 @@
                     </ol>
                 </p>
                 <group>
-                    <field name="partner_id" domain="[('customer', '=', True),('employee','=',False),('vehicle','=',False)]" context="{'search_default_customer':1, 'show_address': 1}" options="{'always_reload': True,'no_quick_create': True,'no_create_edit' : True}"/>
+                    <field name="partner_id" domain="[('customer', '=', True),('employee','=',False),('vehicle','=',False)]" context="{'search_default_customer': True,'search_default_vehicle': False,'search_default_employee': False,  'show_address': 1}" options="{'always_reload': True,'no_quick_create': True,'no_create_edit' : True}"/>
                 </group>
                 <footer>
                     <button name="action_confirm" string="确认修改" type="object" class="btn-primary"/>
