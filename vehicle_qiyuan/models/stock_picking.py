@@ -171,7 +171,7 @@ class Picking(models.Model):
                         vehicle_service.name,
                         # 产品数量=公里数x立方数
                         'product_qty':
-                        move_line.qty_done * picking.partner_id.distance,
+                        picking.partner_id.distance,
                         'date_planned':
                         move_line.date,
                         'product_uom':
